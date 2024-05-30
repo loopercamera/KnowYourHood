@@ -12,6 +12,7 @@ function GamePage({ centerCoordinate, setMapInstance }) {
   const [doneStreetList, setDoneStreetList] = useState([]);
   const [askedStreet, setAskedStreet] = useState();
   const [falseTry, setFalseTry] = useState([]);
+  const [negativeScore, setNegativeScore] = useState(0);
 
   const handleGameStart = () => {
     if (startStreetList.length === 0) {
@@ -42,6 +43,7 @@ function GamePage({ centerCoordinate, setMapInstance }) {
     // Clear doneStreetList
     setDoneStreetList([]);
     setFalseTry([]);
+    setNegativeScore(0);
   };
 
   return (
@@ -60,7 +62,9 @@ function GamePage({ centerCoordinate, setMapInstance }) {
           doneStreetList={doneStreetList}
           setDoneStreetList={setDoneStreetList}
           falseTry={falseTry}
-          setFalseTry={setFalseTry}/>
+          setFalseTry={setFalseTry}
+          negativeScore={negativeScore}
+          setNegativeScore={setNegativeScore}/>
         <div style = {{ display: 'flow'}}>
           <button onClick = {() => navigate('/')}>
             New map section
@@ -75,6 +79,7 @@ function GamePage({ centerCoordinate, setMapInstance }) {
             Restart
           </button>
           <div>Wo ist {askedStreet}?</div>
+          <div>Anzahl Fehlversuche: {negativeScore}</div>
           <ul style= {{ textAlign: 'left'}}>
             {startStreetList.map((street, index) => (
               <li key={index}>{street}</li>
