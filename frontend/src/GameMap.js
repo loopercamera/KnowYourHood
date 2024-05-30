@@ -11,7 +11,7 @@ import { Select } from 'ol/interaction';
 
 import geoJsonData from './data/TestData.json'
 
-const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, startStreetList, setStartStreetList, askedStreet, setAskedStreet, doneStreetList, setDoneStreetList, falseTry, setFalseTry, style }) => {
+const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, startStreetList, setStartStreetList, askedStreet, setAskedStreet, doneStreetList, setDoneStreetList, falseTry, setFalseTry, negativeScore, setNegativeScore, style }) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
 
@@ -40,6 +40,14 @@ const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, st
             stroke: new Stroke({
               color: 'green',
               width: 2,
+            }),
+          });
+        } if (featureName && falseTry.includes(featureName)) {
+          // Wenn der Name in falseTry enthalten ist, grüne Linien
+          return new Style({
+            stroke: new Stroke({
+              color: 'grey',
+              width: 2, 
             }),
           });
         } else {
@@ -95,43 +103,43 @@ const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, st
     const handleClick = (event) => {
       // Funktion um nächste Strasse zu erfragen
       const handleNextStreet = () => {
-        if (startStreetList.length > 0) {
-          // Move the first street to the end of the list
-          const [firstStreet, ...restStreets] = startStreetList;
-          setStartStreetList([...restStreets, firstStreet]);
-          // Set the new first street as askedStreet
-          setAskedStreet(restStreets[0]);
-        }
+          if (startStreetList.length > 0) {
+              // Move the first street to the end of the list
+              const [firstStreet, ...restStreets] = startStreetList;
+              setStartStreetList([...restStreets, firstStreet]);
+              // Set the new first street as askedStreet
+              setAskedStreet(restStreets[0]);
+          }
       };
-
+  
       // Prüfen ob am geklickten Ort ein Feature ist
       const pixel = mapInstance.current.getEventPixel(event.originalEvent);
       const feature = mapInstance.current.forEachFeatureAtPixel(pixel, (feature) => {
-        return feature;
+          return feature;
       });
       if (feature) {
-        // Hier ergänzen was passiert, wenn man auf eine Linie klickt
-        const featureName = feature.get('name');
-        const featureStyle = feature.getStyle();
-    
-        if (featureName === askedStreet && featureStyle && featureStyle.getStroke().getColor() === 'blue') {
-          console.log('Richtig!');
-          console.log('Bereits gefundene Strassen:', doneStreetList);
-          setFalseTry([])
-    
-          // Aktualisiere startStreetList und doneStreetList
-          setStartStreetList(prevList => prevList.filter(name => name !== askedStreet));
-          setDoneStreetList(prevList => [...prevList, askedStreet]);
-          handleNextStreet();
-        } else {
-          console.log(falseTry)
-          console.log('Gesucht ist:', askedStreet, 'Geklickt wurde:', featureName);
-          console.log('Bereits gefundene Strassen:', doneStreetList);
-          setFalseTry(prevList => [...prevList, featureName]);
-        }
+          // Hier ergänzen was passiert, wenn man auf eine Linie klickt
+          const featureName = feature.get('name');
+          const featureStyle = feature.getStyle();
+  
+          if (featureName === askedStreet && featureStyle && featureStyle.getStroke().getColor() === 'blue') {
+              setFalseTry([])
+  
+              // Aktualisiere startStreetList und doneStreetList
+              setStartStreetList(prevList => prevList.filter(name => name !== askedStreet));
+              setDoneStreetList(prevList => [...prevList, askedStreet]);
+              handleNextStreet();
+          } else {
+              setFalseTry(prevList => [...prevList, featureName]);
+  
+              // Wenn der Name weder in doneStreetList noch in falseTry ist, erhöhe negativeScore
+              if (!doneStreetList.includes(featureName) && !falseTry.includes(featureName)) {
+                  setNegativeScore(prevScore => prevScore + 1);
+              }
+          }
       }
     };
-
+  
     mapInstance.current.on('pointermove', handlePointerMove);
     mapInstance.current.on('click', handleClick);
 
@@ -140,7 +148,7 @@ const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, st
       mapInstance.current.un('click', handleClick);
       mapInstance.current.setTarget(null);
     };
-  }, [centerCoordinate, fetchData, setFetchData, askedStreet, setAskedStreet, setDoneStreetList, startStreetList, setStartStreetList, doneStreetList, falseTry, setFalseTry ]);
+  }, [centerCoordinate, fetchData, setFetchData, askedStreet, setAskedStreet, setDoneStreetList, startStreetList, setStartStreetList, doneStreetList, falseTry, setFalseTry, setNegativeScore ]);
 
   useEffect(() => {
     setMapInstance(mapInstance.current);
