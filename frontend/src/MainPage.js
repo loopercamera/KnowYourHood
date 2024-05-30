@@ -1,5 +1,5 @@
 import "./MainPage.css";
-import React from "react";
+import React, { useState } from "react";
 import SelectDataFrameMap from "./SelectDataFrameMap";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar.js";
@@ -11,6 +11,12 @@ function MainPage({
   setMapInstance,
 }) {
   const navigate = useNavigate();
+  const [centerBoxCoordinate, setCenterBoxCoordinate] = useState(0)
+
+  const handleFetch = () => {
+    navigate("/play")
+    console.log(centerBoxCoordinate)
+  };
 
   return (
     <div className="MainPage">
@@ -19,13 +25,14 @@ function MainPage({
           style={{ width: "500px", height: "500px" }}
           centerCoordinate={centerCoordinate}
           setMapInstance={setMapInstance}
+          setCenterBoxCoordinate={setCenterBoxCoordinate}
         />
         <div style={{ display: "flow" }}>
           <SearchBar
             setCenterCoordinate={setCenterCoordinate}
             map={mapInstance}
           />
-          <button onClick={() => navigate("/play")}>Fetch Data</button>
+          <button onClick={handleFetch}>Fetch Data</button>
         </div>
       </div>
     </div>

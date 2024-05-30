@@ -9,7 +9,7 @@ import { Vector as VectorSource } from "ol/source";
 import { Feature } from "ol";
 import Polygon from "ol/geom/Polygon";
 
-const MapComponent = ({ centerCoordinate, setMapInstance, style }) => {
+const MapComponent = ({ centerCoordinate, style, setCenterBoxCoordinate }) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const vectorLayer = useRef(null);
@@ -51,7 +51,7 @@ const MapComponent = ({ centerCoordinate, setMapInstance, style }) => {
       const lonLat = toLonLat(centerCoordinate);
       const [lon, lat] = lonLat;
       const coords3857 = fromLonLat([lon, lat]);
-      console.log(coords3857);
+      setCenterBoxCoordinate(lonLat)
 
       const squareDist = 1000; // 1 km
 
@@ -110,7 +110,7 @@ const MapComponent = ({ centerCoordinate, setMapInstance, style }) => {
       mapInstance.current.getView().un("change:center", updateCenter);
       mapInstance.current.setTarget(null);
     };
-  }, [centerCoordinate]);
+  }, [centerCoordinate, setCenterBoxCoordinate]);
 
   return <div ref={mapRef} style={style} />;
 };
