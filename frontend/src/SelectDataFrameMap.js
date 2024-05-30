@@ -4,9 +4,11 @@ import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM";
 import { fromLonLat, toLonLat } from "ol/proj";
 import { Vector as VectorLayer } from "ol/layer";
-import { Stroke, Style } from "ol/style.js";
+import { Stroke, Style, Fill } from "ol/style.js";
 import { Vector as VectorSource } from "ol/source";
 import { GeoJSON } from "ol/format";
+import { Feature } from "ol";
+import Polygon from "ol/geom/Polygon";
 
 const MapComponent = ({ centerCoordinate, setMapInstance, style }) => {
   const mapRef = useRef(null);
@@ -17,6 +19,9 @@ const MapComponent = ({ centerCoordinate, setMapInstance, style }) => {
     vectorLayer.current = new VectorLayer({
       source: new VectorSource(),
       style: new Style({
+        fill: new Fill({
+          color: 'rgba(0, 0, 0, 0.5)',
+        }),
         stroke: new Stroke({
           color: "blue",
           width: 3,
@@ -76,9 +81,24 @@ const MapComponent = ({ centerCoordinate, setMapInstance, style }) => {
         ],
       };
 
+      const outerCoordinates = [
+        [-20037508.34, -20037508.34],
+        [-20037508.34, 20037508.34],
+        [20037508.34, 20037508.34],
+        [20037508.34, -20037508.34],
+        [-20037508.34, -20037508.34],
+      ];
+
+      const maskCoordinates = [
+        outerCoordinates,
+        geojsonObject.features[0].geometry.coordinates[0],
+      ];
+
+      const maskFeature = new Feature(new Polygon(maskCoordinates));
+
       const vectorSource = vectorLayer.current.getSource();
       vectorSource.clear();
-      vectorSource.addFeatures(new GeoJSON().readFeatures(geojsonObject));
+      vectorSource.addFeature(maskFeature);
     };
 
     // Add event listener to map's view for 'change:center'
