@@ -6,7 +6,6 @@ import { fromLonLat, toLonLat } from "ol/proj";
 import { Vector as VectorLayer } from "ol/layer";
 import { Stroke, Style, Fill } from "ol/style.js";
 import { Vector as VectorSource } from "ol/source";
-import { GeoJSON } from "ol/format";
 import { Feature } from "ol";
 import Polygon from "ol/geom/Polygon";
 
@@ -41,7 +40,9 @@ const MapComponent = ({ centerCoordinate, setMapInstance, style }) => {
       view: new View({
         center: centerCoordinate,
         zoom: 15,
+        maxZoom: 15,
       }),
+      controls: [],
     });
 
     const updateCenter = () => {
@@ -79,7 +80,7 @@ const MapComponent = ({ centerCoordinate, setMapInstance, style }) => {
             },
           },
         ],
-      };
+      }; 
 
       const outerCoordinates = [
         [-20037508.34, -20037508.34],
@@ -109,9 +110,9 @@ const MapComponent = ({ centerCoordinate, setMapInstance, style }) => {
       mapInstance.current.getView().un("change:center", updateCenter);
       mapInstance.current.setTarget(null);
     };
-  }, []);
+  }, [centerCoordinate]);
 
-  return <div ref={mapRef} style={{ width: "100%", height: "400px" }} />;
+  return <div ref={mapRef} style={style} />;
 };
 
 export default MapComponent;
