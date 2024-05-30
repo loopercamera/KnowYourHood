@@ -1,8 +1,9 @@
+import sys
 import requests
 import json
 import pandas as pd
 import geojson
-from shapely.geometry import LineString
+from shapely.geometry import LineString, MultiLineString
 from shapely.ops import transform
 import pyproj
 import os
@@ -34,7 +35,7 @@ def Overpass_Query(bbox):
     if response.status_code == 200:
         data = response.json()
         # Save JSON data
-        with open('backend/data/temp_overpass.json', 'w', encoding='utf-8') as f:
+        with open('/data/temp_overpass.json', 'w', encoding='utf-8') as f:  # Updated path
             json.dump(data, f, ensure_ascii=False, indent=4)
         print("Data successfully downloaded and saved.")
     else:
@@ -42,13 +43,12 @@ def Overpass_Query(bbox):
         print(response.text)
 
 def Clean_Up_Data():
-    with open('backend/data/temp_overpass.json', 'r', encoding='utf-8') as f:
+    with open('/data/temp_overpass.json', 'r', encoding='utf-8') as f:  # Updated path
         data = json.load(f)
 
     # Knoten (nodes) und Wege (ways) extrahieren
     nodes = {node['id']: (node['lon'], node['lat']) for node in data['elements'] if node['type'] == 'node'}
     ways = [way for way in data['elements'] if way['type'] == 'way']
-
 
     # Daten in ein Pandas DataFrame umwandeln
     rows = []
@@ -73,11 +73,9 @@ def Clean_Up_Data():
     df = pd.DataFrame(rows, columns=['way_id', 'name', 'highway', 'hgv', 'surface', 'geometry', 'length'])
     df = df[df['highway'] != 'platform']
 
-    os.remove("backend/data/temp_overpass.json")
+    os.remove("/data/temp_overpass.json")  # Updated path
 
     return df
-
-
 
 def Dataframe_to_json(df):
     from shapely.geometry import mapping, LineString, MultiLineString
@@ -98,7 +96,6 @@ def Dataframe_to_json(df):
         geometries = [LineString(geom) for geom in row['geometry']]
         multi_line = MultiLineString(geometries)
 
-
         feature = geojson.Feature(
             geometry=mapping(multi_line),
             properties={
@@ -111,18 +108,16 @@ def Dataframe_to_json(df):
         features.append(feature)
 
     feature_collection = geojson.FeatureCollection(features)
-    with open('backend/data/street_data.json', 'w', encoding='utf-8') as f:
+    with open('/data/street_data.json', 'w', encoding='utf-8') as f:  # Updated path
         geojson.dump(feature_collection, f, ensure_ascii=False, indent=4)
 
-
-# Example usage
-bbox = (47.241, 8.452, 47.249, 8.471)
-Overpass_Query(bbox)
-# Example usage
-bbox = (47.241, 8.452, 47.249, 8.471)
-Overpass_Query(bbox)
-df = Clean_Up_Data()
-
-Dataframe_to_json(df)
-
-#TODO function Copy street_data.json to frontend
+if __name__ == "__main__":
+    # if len(sys.argv) != 5:
+    #     print("Usage: python your_script.py <south> <west> <north> <east>")
+    # else:
+    #bbox = (float(sys.argv[1]), float(sys.argv[2]), float(sys.argv[3]), float(sys.argv[4]))
+    bbox = (47.241, 8.452, 47.249,8.471)
+    Overpass_Query(bbox)
+    df = Clean_Up_Data()
+    Dataframe_to_json(df)
+    # Optional: copy street_data.json to frontend folder
