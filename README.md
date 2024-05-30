@@ -39,3 +39,15 @@ Start React App
 ```npm
 npm run start
 ```
+
+Navigate to the uvicorn Server
+
+```bash
+cd backend/Server/
+```
+
+Start API
+
+```bash
+uvicorn main:app --reload
+```
