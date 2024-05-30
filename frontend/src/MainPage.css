@@ -1,4 +1,52 @@
+/* MainPage.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap');
+
 .MainPage {
-  text-align: left;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  background-color: #d9e4dd; /* Hellere Hintergrundfarbe */
+  color: #333; /* Textfarbe */
+  font-family: 'Comic Sans MS', 'Bubblegum Sans', 'Marker Felt', 'Arial', sans-serif; /* Verspieltere Schriftarten */
+  height: 100vh;
+  padding: 20px;
 }
 
+.SelectDataFrameMap {
+  width: 500px;
+  height: 500px;
+  background-color: #b3b3a1; /* Karten Hintergrundfarbe */
+  border: 3px solid #669900; /* Karten Randfarbe */
+  border-radius: 10px;
+  margin-right: 20px; /* Abstand zur rechten Seite */
+}
+
+button {
+  background-color: #669900; /* Button Hintergrundfarbe */
+  color: #fff; /* Button Textfarbe */
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-family: 'Comic Sans MS', 'Bubblegum Sans', 'Marker Felt', 'Arial', sans-serif; /* Verspieltere Schriftarten */
+}
+
+button:hover {
+  background-color: #558800; /* Button Hover Hintergrundfarbe */
+}
+
+button:active {
+  background-color: #446600; /* Button Active Hintergrundfarbe */
+}
+
+button:focus {
+  outline: none;
+}
+
+.MainPage > div {
+  margin: 10px 0; /* Abstand zwischen den inneren Divs */
+}

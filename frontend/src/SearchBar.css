@@ -1,7 +1,7 @@
 div.search-results ul {
     list-style: none;
     padding-left: 0;
-    max-height: 120px;
+    max-height: 110px;
     overflow-y: auto;
   }
   
@@ -21,4 +21,43 @@ div.search-results ul {
   div.search-results ul li:last-child {
     display: none;
 }
+
+/* SearchBar.css */
+
+.search-bar {
+  margin-bottom: 20px;
+}
+
+.search-bar input[type='text'] {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.search-results {
+  margin-top: 10px;
+}
+
+.ol-search-complete {
+  list-style: none;
+  padding: 0;
+}
+
+.ol-search-complete li {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.ol-search-complete li:last-child {
+  border-bottom: none;
+}
+
+.ol-search-complete li:hover {
+  background-color: #e9e9e9;
+}
+
   

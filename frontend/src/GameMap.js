@@ -38,24 +38,24 @@ const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, st
           // Wenn der Name in doneStreetList enthalten ist, grüne Linien
           return new Style({
             stroke: new Stroke({
-              color: 'green',
-              width: 2,
+              color: '#558800', //rot
+              width: 3,
             }),
           });
         } if (featureName && falseTry.includes(featureName)) {
           // Wenn der Name in falseTry enthalten ist, grüne Linien
           return new Style({
             stroke: new Stroke({
-              color: 'grey',
-              width: 2, 
+              color: '#CC3333', //rot
+              width: 3, 
             }),
           });
         } else {
           // Wenn der Name nicht in doneStreetList enthalten ist, rote Linien
           return new Style({
             stroke: new Stroke({
-              color: 'red',
-              width: 2,
+              color: '#3388CC', //blau
+              width: 3,
             }),
           });
         }
