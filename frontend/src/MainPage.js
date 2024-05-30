@@ -2,8 +2,9 @@ import './MainPage.css';
 import React from 'react';
 import SelectDataFrameMap from './SelectDataFrameMap';
 import { useNavigate } from 'react-router-dom';
+import SearchBar from './SearchBar.js';
 
-function MainPage({ centerCoordinate, setMapInstance }) {
+function MainPage({ centerCoordinate, setCenterCoordinate, mapInstance, setMapInstance }) {
   const navigate = useNavigate();
 
   return (
@@ -14,6 +15,9 @@ function MainPage({ centerCoordinate, setMapInstance }) {
           centerCoordinate={centerCoordinate}
           setMapInstance={setMapInstance}/>
         <div style = {{ display: 'flow'}}>
+          <SearchBar 
+            setCenterCoordinate={setCenterCoordinate}
+            map={mapInstance} />
           <button onClick = {() => navigate('/play')}>
             Fetch Data
           </button>
