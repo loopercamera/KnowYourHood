@@ -5,6 +5,7 @@ import geojson
 from shapely.geometry import LineString
 from shapely.ops import transform
 import pyproj
+import os
 
 def Overpass_Query(bbox):
     # Overpass API endpoint
@@ -48,11 +49,6 @@ def Clean_Up_Data():
     nodes = {node['id']: (node['lon'], node['lat']) for node in data['elements'] if node['type'] == 'node'}
     ways = [way for way in data['elements'] if way['type'] == 'way']
 
-    # Projection transformation: WGS84 to UTM
-    project = pyproj.Transformer.from_proj(
-        pyproj.Proj(init='epsg:4326'),  # source coordinate system
-        pyproj.Proj(proj='utm', zone=33, ellps='WGS84')  # destination coordinate system
-    ).transform
 
     # Daten in ein Pandas DataFrame umwandeln
     rows = []
@@ -65,10 +61,6 @@ def Clean_Up_Data():
         surface = way_tags.get('surface', 'N/A')
         geometry = [nodes[node_id] for node_id in way['nodes']]
 
-        # Calculate length of the way
-        line = LineString(geometry)
-        length = transform(project, line).length
-
         rows.append({
             'way_id': way_id,
             'name': way_name,
@@ -76,16 +68,61 @@ def Clean_Up_Data():
             'hgv': hgv,
             'surface': surface,
             'geometry': geometry,
-            'length': length
         })
 
     df = pd.DataFrame(rows, columns=['way_id', 'name', 'highway', 'hgv', 'surface', 'geometry', 'length'])
     df = df[df['highway'] != 'platform']
 
+    os.remove("backend/data/temp_overpass.json")
+
     return df
+
+
+
+def Dataframe_to_json(df):
+    from shapely.geometry import mapping, LineString, MultiLineString
+
+    grouped = df.groupby('name').agg({
+        'geometry': list,
+        'highway': 'first',
+        'hgv': 'first',
+        'surface': 'first'
+    }).reset_index()
+
+    features = []
+    for _, row in grouped.iterrows():
+        name = row['name']
+        highway = row['highway']
+        hgv = row['hgv']
+        surface = row['surface']
+        geometries = [LineString(geom) for geom in row['geometry']]
+        multi_line = MultiLineString(geometries)
+
+
+        feature = geojson.Feature(
+            geometry=mapping(multi_line),
+            properties={
+                'name': name,
+                'highway': highway,
+                'hgv': hgv,
+                'surface': surface,
+            }
+        )
+        features.append(feature)
+
+    feature_collection = geojson.FeatureCollection(features)
+    with open('backend/data/street_data.json', 'w', encoding='utf-8') as f:
+        geojson.dump(feature_collection, f, ensure_ascii=False, indent=4)
+
 
 # Example usage
 bbox = (47.241, 8.452, 47.249, 8.471)
 Overpass_Query(bbox)
+# Example usage
+bbox = (47.241, 8.452, 47.249, 8.471)
+Overpass_Query(bbox)
 df = Clean_Up_Data()
-print(df)
+
+Dataframe_to_json(df)
+
+#TODO function Copy street_data.json to frontend
