@@ -1,21 +1,21 @@
-import './MainPage.css';
+import './GamePage.css';
 import React from 'react';
-import SelectDataFrameMap from './SelectDataFrameMap';
+import GameMap from './GameMap.js';
 import { useNavigate } from 'react-router-dom';
 
-function MainPage({ centerCoordinate, setMapInstance }) {
+function GamePage({ centerCoordinate, setMapInstance }) {
   const navigate = useNavigate();
 
   return (
-    <div className="MainPage">
+    <div className="GamePage">
       <div style = {{ display: 'flex' }}>
-        <SelectDataFrameMap 
+        <GameMap 
           style = {{ width: '500px', height: '500px' }}
           centerCoordinate={centerCoordinate}
           setMapInstance={setMapInstance}/>
         <div style = {{ display: 'flow'}}>
-          <button onClick = {() => navigate('/play')}>
-            Fetch Data
+          <button onClick = {() => navigate('/')}>
+            back
           </button>
         </div>
       </div>
@@ -23,4 +23,4 @@ function MainPage({ centerCoordinate, setMapInstance }) {
   );
 }
 
-export default MainPage;
+export default GamePage;
