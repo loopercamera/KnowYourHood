@@ -1,5 +1,5 @@
 import "./MainPage.css";
-import React, { useState } from "react";
+import React from "react";
 import SelectDataFrameMap from "./SelectDataFrameMap";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar.js";
@@ -9,9 +9,10 @@ function MainPage({
   setCenterCoordinate,
   mapInstance,
   setMapInstance,
+  centerBoxCoordinate,
+  setCenterBoxCoordinate
 }) {
   const navigate = useNavigate();
-  const [centerBoxCoordinate, setCenterBoxCoordinate] = useState(0)
 
   const handleFetch = () => {
     navigate("/play")

@@ -11,7 +11,7 @@ import { Select } from 'ol/interaction';
 
 import geoJsonData from './data/TestData.json'
 
-const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, startStreetList, setStartStreetList, askedStreet, setAskedStreet, doneStreetList, setDoneStreetList, falseTry, setFalseTry, negativeScore, setNegativeScore, style }) => {
+const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, startStreetList, setStartStreetList, askedStreet, setAskedStreet, doneStreetList, setDoneStreetList, falseTry, setFalseTry, centerBoxCoordinate, negativeScore, setNegativeScore, style }) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
 
@@ -38,24 +38,24 @@ const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, st
           // Wenn der Name in doneStreetList enthalten ist, grüne Linien
           return new Style({
             stroke: new Stroke({
-              color: 'green',
-              width: 2,
+              color: '#558800', //rot
+              width: 3,
             }),
           });
         } if (featureName && falseTry.includes(featureName)) {
           // Wenn der Name in falseTry enthalten ist, grüne Linien
           return new Style({
             stroke: new Stroke({
-              color: 'grey',
-              width: 2, 
+              color: '#CC3333', //rot
+              width: 3, 
             }),
           });
         } else {
           // Wenn der Name nicht in doneStreetList enthalten ist, rote Linien
           return new Style({
             stroke: new Stroke({
-              color: 'red',
-              width: 2,
+              color: '#3388CC', //blau
+              width: 3,
             }),
           });
         }
@@ -71,7 +71,7 @@ const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, st
         }),
         StreetLayer],
       view: new View({
-        center: centerCoordinate,
+        center: centerBoxCoordinate,
         zoom: 15,
         minZoom: 2, // Set minZoom to allow zooming out
       }),
@@ -148,7 +148,7 @@ const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, st
       mapInstance.current.un('click', handleClick);
       mapInstance.current.setTarget(null);
     };
-  }, [centerCoordinate, fetchData, setFetchData, askedStreet, setAskedStreet, setDoneStreetList, startStreetList, setStartStreetList, doneStreetList, falseTry, setFalseTry, setNegativeScore ]);
+  }, [centerCoordinate, centerBoxCoordinate, fetchData, setFetchData, askedStreet, setAskedStreet, setDoneStreetList, startStreetList, setStartStreetList, doneStreetList, falseTry, setFalseTry, setNegativeScore ]);
 
   useEffect(() => {
     setMapInstance(mapInstance.current);

@@ -1,11 +1,49 @@
-// Todo, reihenfolge beim start und restart zufällig definieren
-
+// GamePage.js
 import './GamePage.css';
 import React, { useState } from 'react';
 import GameMap from './GameMap.js';
 import { useNavigate } from 'react-router-dom';
 
-function GamePage({ centerCoordinate, setMapInstance }) {
+function StreetList({ streets, doneStreetList }) {
+  const itemsPerColumn = 20;
+
+  const splitIntoColumns = (arr, size) => {
+    return arr.reduce((columns, item, index) => {
+      const columnIndex = Math.floor(index / size);
+      if (!columns[columnIndex]) {
+        columns[columnIndex] = [];
+      }
+      columns[columnIndex].push(item);
+      return columns;
+    }, []);
+  };
+
+  const isStreetDone = (street) => {
+    return doneStreetList.includes(street);
+  };
+
+  const columns = splitIntoColumns(streets, itemsPerColumn);
+
+  return (
+    <div className="street-list">
+      {columns.map((column, index) => (
+        <div key={index} style={{ float: 'left', marginRight: '20px' }}>
+          <table>
+            <tbody>
+              {column.map((street, i) => (
+                <tr key={i}>
+                  <td className={isStreetDone(street) ? 'done-street' : ''}>{street}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function GamePage({ centerCoordinate, setMapInstance, centerBoxCoordinate, setCenterBoxCoordinate }) {
   const navigate = useNavigate();
   const [fetchData, setFetchData] = useState(false);
   const [startStreetList, setStartStreetList] = useState([]);
@@ -13,6 +51,12 @@ function GamePage({ centerCoordinate, setMapInstance }) {
   const [askedStreet, setAskedStreet] = useState();
   const [falseTry, setFalseTry] = useState([]);
   const [negativeScore, setNegativeScore] = useState(0);
+
+  // Generiere die Liste der Strassennamen in alphabetischer Reihenfolge
+  const generateStreetList = () => {
+    const sortedStreets = [...startStreetList].sort();
+    return sortedStreets;
+  };
 
   const handleGameStart = () => {
     if (startStreetList.length === 0) {
@@ -34,6 +78,7 @@ function GamePage({ centerCoordinate, setMapInstance }) {
       // Set the new first street as askedStreet
       setAskedStreet(restStreets[0]);
       setFalseTry([]);
+      setNegativeScore(prevScore => prevScore + 1);
     }
   }
 
@@ -48,8 +93,12 @@ function GamePage({ centerCoordinate, setMapInstance }) {
 
   return (
     <div className="GamePage">
-      <div style = {{ display: 'flex' }}>
-        <GameMap 
+      <div style = {{ display: 'flow' }}>
+        <div style = {{ display: 'flex', justifyContent: 'space-between', width: '100%'}}>
+          <div>Where is "{askedStreet}" located?</div>
+          <div>Negative Score: {negativeScore}</div>
+        </div>
+        <GameMap className="GameMap"
           style = {{ width: '500px', height: '500px' }}
           centerCoordinate={centerCoordinate}
           setMapInstance={setMapInstance}
@@ -64,8 +113,9 @@ function GamePage({ centerCoordinate, setMapInstance }) {
           falseTry={falseTry}
           setFalseTry={setFalseTry}
           negativeScore={negativeScore}
-          setNegativeScore={setNegativeScore}/>
-        <div style = {{ display: 'flow'}}>
+          setNegativeScore={setNegativeScore}
+          centerBoxCoordinate={centerBoxCoordinate}/>
+        <div style = {{ display: 'flex', justifyContent: 'space-between', width: '100%'}}>
           <button onClick = {() => navigate('/')}>
             New map section
           </button>
@@ -78,15 +128,9 @@ function GamePage({ centerCoordinate, setMapInstance }) {
           <button onClick = {handleRestart}>
             Restart
           </button>
-          <div>Wo ist {askedStreet}?</div>
-          <div>Anzahl Fehlversuche: {negativeScore}</div>
-          <ul style= {{ textAlign: 'left'}}>
-            {startStreetList.map((street, index) => (
-              <li key={index}>{street}</li>
-            ))}
-          </ul>
         </div>
       </div>
+      <StreetList doneStreetList={doneStreetList} streets={generateStreetList()} />
     </div>
   );
 }
