@@ -19,7 +19,7 @@ const MapComponent = ({ centerCoordinate, style, setCenterBoxCoordinate }) => {
       source: new VectorSource(),
       style: new Style({
         fill: new Fill({
-          color: 'rgba(0, 0, 0, 0.5)',
+          color: "rgba(0, 0, 0, 0.5)",
         }),
         stroke: new Stroke({
           color: "blue",
@@ -51,7 +51,7 @@ const MapComponent = ({ centerCoordinate, style, setCenterBoxCoordinate }) => {
       const lonLat = toLonLat(centerCoordinate);
       const [lon, lat] = lonLat;
       const coords3857 = fromLonLat([lon, lat]);
-      setCenterBoxCoordinate(centerCoordinate)
+      setCenterBoxCoordinate(centerCoordinate);
 
       const squareDist = 1000; // 1 km
 
@@ -80,7 +80,7 @@ const MapComponent = ({ centerCoordinate, style, setCenterBoxCoordinate }) => {
             },
           },
         ],
-      }; 
+      };
 
       const outerCoordinates = [
         [-20037508.34, -20037508.34],

@@ -43,7 +43,6 @@ function App() {
             />
           }
         />
-        <Route path="/test" element={<RunScriptButton />} />
       </Routes>
     </Router>
   );

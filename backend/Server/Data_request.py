@@ -8,12 +8,23 @@ from shapely.ops import transform
 import pyproj
 import os
 
-def Overpass_Query(bbox):
+
+def Transform_3857_to_4326(bbox_3857):
+    # Define the projection objects for EPSG 3857 and EPSG 4326
+    proj3857 = pyproj.Proj(init='epsg:3857')
+    proj4326 = pyproj.Proj(init='epsg:4326')
+    
+    # Transform the bounding box coordinates
+    min_lon, min_lat = pyproj.transform(proj3857, proj4326, bbox_3857[0], bbox_3857[1])
+    max_lon, max_lat = pyproj.transform(proj3857, proj4326, bbox_3857[2], bbox_3857[3])
+    
+    # Return the transformed bounding box
+    return (min_lon, min_lat, max_lon, max_lat)
+
+def Overpass_Query(min_lon, min_lat, max_lon, max_lat):
     # Overpass API endpoint
     url = "http://overpass-api.de/api/interpreter"
 
-    # Extract bounding box coordinates
-    south, west, north, east = bbox
 
     # Query for the Overpass API with the bounding box
     query = f"""
@@ -22,7 +33,7 @@ def Overpass_Query(bbox):
     way
         ["highway"]
         ["name"]
-        ({south},{west},{north},{east});
+        ({min_lon},{min_lat},{max_lon},{max_lat});
     >;
     );
     out body;
@@ -35,7 +46,7 @@ def Overpass_Query(bbox):
     if response.status_code == 200:
         data = response.json()
         # Save JSON data
-        with open('/data/temp_overpass.json', 'w', encoding='utf-8') as f:  # Updated path
+        with open('temp_overpass.json', 'w', encoding='utf-8') as f:  # Updated path
             json.dump(data, f, ensure_ascii=False, indent=4)
         print("Data successfully downloaded and saved.")
     else:
@@ -43,7 +54,7 @@ def Overpass_Query(bbox):
         print(response.text)
 
 def Clean_Up_Data():
-    with open('/data/temp_overpass.json', 'r', encoding='utf-8') as f:  # Updated path
+    with open('temp_overpass.json', 'r', encoding='utf-8') as f:  # Updated path
         data = json.load(f)
 
     # Knoten (nodes) und Wege (ways) extrahieren
@@ -73,7 +84,7 @@ def Clean_Up_Data():
     df = pd.DataFrame(rows, columns=['way_id', 'name', 'highway', 'hgv', 'surface', 'geometry', 'length'])
     df = df[df['highway'] != 'platform']
 
-    os.remove("/data/temp_overpass.json")  # Updated path
+    os.remove("temp_overpass.json")  # Updated path
 
     return df
 
@@ -108,7 +119,7 @@ def Dataframe_to_json(df):
         features.append(feature)
 
     feature_collection = geojson.FeatureCollection(features)
-    with open('/data/street_data.json', 'w', encoding='utf-8') as f:  # Updated path
+    with open('street_data.json', 'w', encoding='utf-8') as f:  # Updated path
         geojson.dump(feature_collection, f, ensure_ascii=False, indent=4)
 
 if __name__ == "__main__":
@@ -116,8 +127,9 @@ if __name__ == "__main__":
     #     print("Usage: python your_script.py <south> <west> <north> <east>")
     # else:
     #bbox = (float(sys.argv[1]), float(sys.argv[2]), float(sys.argv[3]), float(sys.argv[4]))
-    bbox = (47.241, 8.452, 47.249,8.471)
-    Overpass_Query(bbox)
+    bbox_3857 = (949784.4685478611,6002409.281270206,951784.4685478611,6004409.281270206)
+    min_lon, min_lat, max_lon, max_lat = Transform_3857_to_4326(bbox_3857)
+    Overpass_Query(min_lon, min_lat, max_lon, max_lat)
     df = Clean_Up_Data()
     Dataframe_to_json(df)
     # Optional: copy street_data.json to frontend folder
