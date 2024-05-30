@@ -51,7 +51,7 @@ const MapComponent = ({ centerCoordinate, style, setCenterBoxCoordinate }) => {
       const lonLat = toLonLat(centerCoordinate);
       const [lon, lat] = lonLat;
       const coords3857 = fromLonLat([lon, lat]);
-      setCenterBoxCoordinate(lonLat)
+      setCenterBoxCoordinate(centerCoordinate)
 
       const squareDist = 1000; // 1 km
 

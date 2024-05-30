@@ -11,7 +11,7 @@ import { Select } from 'ol/interaction';
 
 import geoJsonData from './data/TestData.json'
 
-const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, startStreetList, setStartStreetList, askedStreet, setAskedStreet, doneStreetList, setDoneStreetList, falseTry, setFalseTry, negativeScore, setNegativeScore, style }) => {
+const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, startStreetList, setStartStreetList, askedStreet, setAskedStreet, doneStreetList, setDoneStreetList, falseTry, setFalseTry, centerBoxCoordinate, negativeScore, setNegativeScore, style }) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
 
@@ -71,7 +71,7 @@ const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, st
         }),
         StreetLayer],
       view: new View({
-        center: centerCoordinate,
+        center: centerBoxCoordinate,
         zoom: 15,
         minZoom: 2, // Set minZoom to allow zooming out
       }),
@@ -148,7 +148,7 @@ const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, st
       mapInstance.current.un('click', handleClick);
       mapInstance.current.setTarget(null);
     };
-  }, [centerCoordinate, fetchData, setFetchData, askedStreet, setAskedStreet, setDoneStreetList, startStreetList, setStartStreetList, doneStreetList, falseTry, setFalseTry, setNegativeScore ]);
+  }, [centerCoordinate, centerBoxCoordinate, fetchData, setFetchData, askedStreet, setAskedStreet, setDoneStreetList, startStreetList, setStartStreetList, doneStreetList, falseTry, setFalseTry, setNegativeScore ]);
 
   useEffect(() => {
     setMapInstance(mapInstance.current);

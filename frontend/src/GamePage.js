@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import GameMap from './GameMap.js';
 import { useNavigate } from 'react-router-dom';
 
-function GamePage({ centerCoordinate, setMapInstance }) {
+function GamePage({ centerCoordinate, setMapInstance, centerBoxCoordinate, setCenterBoxCoordinate }) {
   const navigate = useNavigate();
   const [fetchData, setFetchData] = useState(false);
   const [startStreetList, setStartStreetList] = useState([]);
@@ -64,7 +64,8 @@ function GamePage({ centerCoordinate, setMapInstance }) {
           falseTry={falseTry}
           setFalseTry={setFalseTry}
           negativeScore={negativeScore}
-          setNegativeScore={setNegativeScore}/>
+          setNegativeScore={setNegativeScore}
+          centerBoxCoordinate={centerBoxCoordinate}/>
         <div style = {{ display: 'flow'}}>
           <button onClick = {() => navigate('/')}>
             New map section

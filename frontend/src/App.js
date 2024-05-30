@@ -6,6 +6,7 @@ import GamePage from './GamePage';
 function App() {
   const [centerCoordinate, setCenterCoordinate] = useState([950784.4685478611, 6003409.281270206]);
   const [mapInstance, setMapInstance] = useState(null);
+  const [centerBoxCoordinate, setCenterBoxCoordinate] = useState([950784.4685478611, 6003409.281270206])
 
   return (
     <Router>
@@ -19,6 +20,8 @@ function App() {
               setCenterCoordinate={setCenterCoordinate}
               mapInstance={mapInstance}
               setMapInstance={setMapInstance}
+              centerBoxCoordinate={centerBoxCoordinate}
+              setCenterBoxCoordinate={setCenterBoxCoordinate}
             />
           }
         />
@@ -30,6 +33,8 @@ function App() {
               setCenterCoordinate={setCenterCoordinate}
               mapInstance={mapInstance}
               setMapInstance={setMapInstance}
+              centerBoxCoordinate={centerBoxCoordinate}
+              setCenterBoxCoordinate={setCenterBoxCoordinate}
             />
           }
         />
