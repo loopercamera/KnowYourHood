@@ -84,11 +84,16 @@ function GamePage({ centerCoordinate, setMapInstance, centerBoxCoordinate, setCe
       setStartStreetList([...restStreets, firstStreet]);
       
       // Set the new first street as askedStreet
-      setAskedStreet(restStreets[0]);
-      setFalseTry([]);
-      setNegativeScore(prevScore => prevScore + 1);
+      if (restStreets.length > 0) {
+        setAskedStreet(restStreets[0]);
+        setFalseTry([]);
+        setNegativeScore(prevScore => prevScore + 1);
+      } else {
+        console.log("Keine Straßen mehr in der Liste.");
+        setAskedStreet(null);
+      }
     }
-  }
+  };
 
   const handleRestart = () => {
     // Move elements from doneStreetList to startStreetList

@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { Map, View } from "ol";
 import TileLayer from "ol/layer/Tile";
-import OSM from "ol/source/OSM";
 import GeoJSON from "ol/format/GeoJSON";
 import Style from "ol/style/Style";
 import Stroke from "ol/style/Stroke";
