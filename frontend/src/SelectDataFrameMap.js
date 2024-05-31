@@ -82,7 +82,7 @@ const MapComponent = ({
           color: "rgba(0, 0, 0, 0.5)",
         }),
         stroke: new Stroke({
-          color: "blue",
+          color: "#3388CC",
           width: 3,
         }),
       }),

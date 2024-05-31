@@ -18,9 +18,11 @@ function App() {
 
   return (
     <Router>
-      <div style = {{display: 'flex'}}>
+      <div style = {{display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between'}}>
         <h1>KnowYourHood</h1>
-        <div>GitHub</div>
+        <a href="https://github.com/loopercamera/KnowYourHood" target="_blank" style={{ textDecoration: 'none' }}>
+          <h2>GitHub</h2>
+        </a>
       </div>
       <Routes>
         <Route

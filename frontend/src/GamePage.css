@@ -63,7 +63,7 @@ td {
 
 .street-list {
   max-width: calc(50% - 20px);
-  padding-left: 20px; /* Maximale Breite auf 50% der Containerbreite minus Margin setzen */
+  padding-right: 20px; /* Maximale Breite auf 50% der Containerbreite minus Margin setzen */
   padding-top: 37px;
   display: inline-block; /* In einer Linie anzeigen */
 
@@ -90,6 +90,7 @@ ul {
 .street-list-container {
   overflow-x: auto; /* Horizontales Scrollen aktivieren */
   white-space: nowrap; /* Verhindern von Zeilenumbrüchen */
+  margin-left: 20px;
 }
 
 
