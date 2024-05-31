@@ -27,7 +27,12 @@ async def root(x1: float, y1: float, x2: float, y2: float):
         Overpass_Query(min_lon, min_lat, max_lon, max_lat)
         df = Clean_Up_Data()
         Dataframe_to_json(df)
-        return {"status": "Data successfully saved in street_data.json"}
+
+        if len(df) == 0:
+            raise HTTPException(status_code=404, detail="No data found in the specified bounding box")
+        else:
+            return {"status": "Data successfully saved in street_data.json"}
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
