@@ -7,11 +7,11 @@ import Style from 'ol/style/Style';
 import Stroke from 'ol/style/Stroke';
 import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
-import { Select } from 'ol/interaction';
+import { Select, DragPan, MouseWheelZoom } from 'ol/interaction';
 
 import geoJsonData from './data/street_data.json'
 
-const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, startStreetList, setStartStreetList, askedStreet, setAskedStreet, doneStreetList, setDoneStreetList, falseTry, setFalseTry, centerBoxCoordinate, negativeScore, setNegativeScore, style }) => {
+const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, startStreetList, setStartStreetList, askedStreet, setAskedStreet, doneStreetList, setDoneStreetList, falseTry, setFalseTry, centerBoxCoordinate, negativeScore, setNegativeScore, borderBox, style }) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
 
@@ -73,10 +73,11 @@ const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, st
       view: new View({
         center: centerBoxCoordinate,
         zoom: 15,
-        minZoom: 2, // Set minZoom to allow zooming out
+        minZoom: 15,
+        extent: borderBox
       }),
       controls: [],
-      interactions: [new Select()],
+      interactions: [new Select(), new DragPan(), new MouseWheelZoom()],
     });
 
     // Eventlistener der prüft, wo man hovert und entsprechend die Linien einfärbt
