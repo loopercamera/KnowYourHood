@@ -114,8 +114,9 @@ const GameMap = ({
 
     // Eventlistener der prüft, wo man hovert und entsprechend die Linien einfärbt
     const handlePointerMove = (event) => {
-      // Prüfen ob am gehovertem Ort ein Feature ist
+      // Prüfen, ob sich der Mauszeiger über einem Feature befindet
       const pixel = mapInstance.current.getEventPixel(event.originalEvent);
+<<<<<<< Updated upstream
       const feature = mapInstance.current.forEachFeatureAtPixel(
         pixel,
         (feature) => {
@@ -132,10 +133,34 @@ const GameMap = ({
           new Style({
             stroke: new Stroke({
               color: "blue",
+=======
+      const feature = mapInstance.current.forEachFeatureAtPixel(pixel, (feature) => {
+        return feature;
+      });
+    
+      // Setze den Mauszeigerstil entsprechend
+      if (feature) {
+        mapRef.current.style.cursor = 'pointer'; // Ändere den Mauszeigerstil
+        StreetLayer.getSource().getFeatures().forEach((feature) => {
+          feature.setStyle(null);
+        });
+        feature.setStyle(
+          new Style({
+            stroke: new Stroke({
+              color: 'blue',
+>>>>>>> Stashed changes
               width: 5,
             }),
           })
         );
+<<<<<<< Updated upstream
+=======
+      } else {
+        mapRef.current.style.cursor = 'default'; // Setze den Standardmauszeigerstil zurück
+        StreetLayer.getSource().getFeatures().forEach((feature) => {
+          feature.setStyle(null);
+        });
+>>>>>>> Stashed changes
       }
     };
 

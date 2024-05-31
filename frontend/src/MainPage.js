@@ -1,8 +1,9 @@
 import "./MainPage.css";
-import React from "react";
+import React, {useState} from "react";
 import SelectDataFrameMap from "./SelectDataFrameMap";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar.js";
+import CircularProgress from '@mui/material/CircularProgress';
 
 function MainPage({
   centerCoordinate,
@@ -15,6 +16,7 @@ function MainPage({
   borderBox
 }) {
   const navigate = useNavigate();
+  const [isFetching, setIsFetching] = useState(false);
 
   const handleFetch = () => {
     const coord = centerBoxCoordinate;
@@ -26,6 +28,7 @@ function MainPage({
     const y2 = coord[1] + squareDist;
 
     setBorderBox([x1, y1, x2, y2]);
+    setIsFetching(true);
 
     console.log("x1: ", x1, "y1: ", y1, "x2: ", x2, "y2: ", y2);
     const url = `http://127.0.0.1:8000/OSM-streets/?x1=${x1}&y1=${y1}&x2=${x2}&y2=${y2}`;
@@ -35,22 +38,28 @@ function MainPage({
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        return response.json(); // Assuming response is JSON, adjust if necessary
+        return response.json();
       })
       .then((data) => {
-        // Handle the data as needed
         console.log(data);
-        // If the response is satisfactory, you can proceed with further actions
+        setTimeout(() => {
+          navigate("/play");
+          setIsFetching(false);
+        }, 1000);
+        
       })
       .catch((error) => {
         console.error("There was a problem with the fetch operation:", error);
+        setIsFetching(false);
       });
-    navigate("/play");
-    console.log(centerBoxCoordinate);
   };
 
   return (
     <div className="MainPage">
+      {isFetching && 
+      <div className="overlay">
+        <CircularProgress  size={500} sx={{color:"#558800"}}/>
+      </div>}
       <div style={{ display: "flex", paddingTop: "27px" }}>
         <SelectDataFrameMap
           style={{ width: "500px", height: "500px" }}
