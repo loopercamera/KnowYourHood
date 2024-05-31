@@ -9,7 +9,7 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import { Select } from 'ol/interaction';
 
-import geoJsonData from './data/TestData.json'
+import geoJsonData from './data/street_data.json'
 
 const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, startStreetList, setStartStreetList, askedStreet, setAskedStreet, doneStreetList, setDoneStreetList, falseTry, setFalseTry, centerBoxCoordinate, negativeScore, setNegativeScore, style }) => {
   const mapRef = useRef(null);
