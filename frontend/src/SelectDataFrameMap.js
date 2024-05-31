@@ -9,10 +9,70 @@ import { Vector as VectorSource } from "ol/source";
 import { Feature } from "ol";
 import Polygon from "ol/geom/Polygon";
 
-const MapComponent = ({ centerCoordinate, style, setCenterBoxCoordinate }) => {
+const MapComponent = ({
+  centerCoordinate,
+  style,
+  setCenterBoxCoordinate,
+  setMapInstance
+}) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const vectorLayer = useRef(null);
+
+  const squareDist = 1000; // 1 km
+
+  const initializeSquare = (centerCoord) => {
+    const [lon, lat] = toLonLat(centerCoord);
+    const coords3857 = fromLonLat([lon, lat]);
+
+    const geojsonObject = {
+      type: "FeatureCollection",
+      crs: {
+        type: "name",
+        properties: {
+          name: "EPSG:3857",
+        },
+      },
+      features: [
+        {
+          type: "Feature",
+          geometry: {
+            type: "Polygon",
+            coordinates: [
+              [
+                [coords3857[0] - squareDist, coords3857[1] - squareDist],
+                [coords3857[0] + squareDist, coords3857[1] - squareDist],
+                [coords3857[0] + squareDist, coords3857[1] + squareDist],
+                [coords3857[0] - squareDist, coords3857[1] + squareDist],
+                [coords3857[0] - squareDist, coords3857[1] - squareDist],
+              ],
+            ],
+          },
+        },
+      ],
+    };
+
+    const outerCoordinates = [
+      [-20037508.34, -20037508.34],
+      [-20037508.34, 20037508.34],
+      [20037508.34, 20037508.34],
+      [20037508.34, -20037508.34],
+      [-20037508.34, -20037508.34],
+    ];
+
+    const maskCoordinates = [
+      outerCoordinates,
+      geojsonObject.features[0].geometry.coordinates[0],
+    ];
+
+    const maskFeature = new Feature(new Polygon(maskCoordinates));
+
+    const vectorSource = vectorLayer.current.getSource();
+    vectorSource.clear();
+    vectorSource.addFeature(maskFeature);
+
+    setCenterBoxCoordinate(centerCoord);
+  };
 
   useEffect(() => {
     vectorLayer.current = new VectorLayer({
@@ -45,62 +105,16 @@ const MapComponent = ({ centerCoordinate, style, setCenterBoxCoordinate }) => {
       controls: [],
     });
 
+    setMapInstance(mapInstance.current);
+
     const updateCenter = () => {
       const view = mapInstance.current.getView();
-      const centerCoordinate = view.getCenter();
-      const lonLat = toLonLat(centerCoordinate);
-      const [lon, lat] = lonLat;
-      const coords3857 = fromLonLat([lon, lat]);
-      setCenterBoxCoordinate(centerCoordinate);
-
-      const squareDist = 1000; // 1 km
-
-      const geojsonObject = {
-        type: "FeatureCollection",
-        crs: {
-          type: "name",
-          properties: {
-            name: "EPSG:3857",
-          },
-        },
-        features: [
-          {
-            type: "Feature",
-            geometry: {
-              type: "Polygon",
-              coordinates: [
-                [
-                  [coords3857[0] - squareDist, coords3857[1] - squareDist],
-                  [coords3857[0] + squareDist, coords3857[1] - squareDist],
-                  [coords3857[0] + squareDist, coords3857[1] + squareDist],
-                  [coords3857[0] - squareDist, coords3857[1] + squareDist],
-                  [coords3857[0] - squareDist, coords3857[1] - squareDist],
-                ],
-              ],
-            },
-          },
-        ],
-      };
-
-      const outerCoordinates = [
-        [-20037508.34, -20037508.34],
-        [-20037508.34, 20037508.34],
-        [20037508.34, 20037508.34],
-        [20037508.34, -20037508.34],
-        [-20037508.34, -20037508.34],
-      ];
-
-      const maskCoordinates = [
-        outerCoordinates,
-        geojsonObject.features[0].geometry.coordinates[0],
-      ];
-
-      const maskFeature = new Feature(new Polygon(maskCoordinates));
-
-      const vectorSource = vectorLayer.current.getSource();
-      vectorSource.clear();
-      vectorSource.addFeature(maskFeature);
+      const centerCoord = view.getCenter();
+      initializeSquare(centerCoord);
     };
+
+    // Initial square setup
+    initializeSquare(centerCoordinate);
 
     // Add event listener to map's view for 'change:center'
     mapInstance.current.getView().on("change:center", updateCenter);
@@ -110,7 +124,7 @@ const MapComponent = ({ centerCoordinate, style, setCenterBoxCoordinate }) => {
       mapInstance.current.getView().un("change:center", updateCenter);
       mapInstance.current.setTarget(null);
     };
-  }, [centerCoordinate, setCenterBoxCoordinate]);
+  }, [centerCoordinate, setCenterBoxCoordinate, setMapInstance]);
 
   return <div ref={mapRef} style={style} />;
 };

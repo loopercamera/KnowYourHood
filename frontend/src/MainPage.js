@@ -1,10 +1,8 @@
 import "./MainPage.css";
-import React from "react";
+import React, { useEffect } from "react";
 import SelectDataFrameMap from "./SelectDataFrameMap";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar.js";
-import { fromLonLat, toLonLat } from "ol/proj";
-import { squaredDistance } from "ol/coordinate.js";
 
 function MainPage({
   centerCoordinate,
