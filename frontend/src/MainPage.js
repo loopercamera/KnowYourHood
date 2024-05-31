@@ -17,7 +17,6 @@ function MainPage({
   const navigate = useNavigate();
 
   const handleFetch = () => {
-<<<<<<< Updated upstream
     const coord = centerBoxCoordinate;
 
     const squareDist = 1000;
@@ -46,10 +45,6 @@ function MainPage({
       });
     navigate("/play");
     console.log(centerBoxCoordinate);
-=======
-    navigate("/play")
-    console.log(mapInstance)
->>>>>>> Stashed changes
   };
 
   return (
