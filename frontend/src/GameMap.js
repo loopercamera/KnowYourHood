@@ -116,24 +116,6 @@ const GameMap = ({
     const handlePointerMove = (event) => {
       // Prüfen, ob sich der Mauszeiger über einem Feature befindet
       const pixel = mapInstance.current.getEventPixel(event.originalEvent);
-<<<<<<< Updated upstream
-      const feature = mapInstance.current.forEachFeatureAtPixel(
-        pixel,
-        (feature) => {
-          return feature;
-        }
-      );
-      StreetLayer.getSource()
-        .getFeatures()
-        .forEach((feature) => {
-          feature.setStyle(null);
-        });
-      if (feature) {
-        feature.setStyle(
-          new Style({
-            stroke: new Stroke({
-              color: "blue",
-=======
       const feature = mapInstance.current.forEachFeatureAtPixel(pixel, (feature) => {
         return feature;
       });
@@ -148,21 +130,17 @@ const GameMap = ({
           new Style({
             stroke: new Stroke({
               color: 'blue',
->>>>>>> Stashed changes
               width: 5,
             }),
           })
         );
-<<<<<<< Updated upstream
-=======
       } else {
         mapRef.current.style.cursor = 'default'; // Setze den Standardmauszeigerstil zurück
         StreetLayer.getSource().getFeatures().forEach((feature) => {
           feature.setStyle(null);
         });
->>>>>>> Stashed changes
       }
-    };
+    };    
 
     // Eventlistener der die Properties eines Features abfragt
     const handleClick = (event) => {
