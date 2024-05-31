@@ -31,6 +31,3 @@ async def root(x1: float, y1: float, x2: float, y2: float):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/OSM-test/")
-async def test(x1: float):
-    return {"status": "Test endpoint"}
