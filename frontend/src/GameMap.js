@@ -38,7 +38,7 @@ const GameMap = ({ centerCoordinate, setMapInstance, fetchData, setFetchData, st
           // Wenn der Name in doneStreetList enthalten ist, grüne Linien
           return new Style({
             stroke: new Stroke({
-              color: '#558800', //rot
+              color: '#558800', //grün
               width: 3,
             }),
           });

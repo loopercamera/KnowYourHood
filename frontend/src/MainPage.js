@@ -1,5 +1,5 @@
 import "./MainPage.css";
-import React, { useEffect } from "react";
+import React from "react";
 import SelectDataFrameMap from "./SelectDataFrameMap";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./SearchBar.js";
@@ -51,19 +51,21 @@ function MainPage({
 
   return (
     <div className="MainPage">
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", paddingTop: "27px" }}>
         <SelectDataFrameMap
           style={{ width: "500px", height: "500px" }}
           centerCoordinate={centerCoordinate}
           setMapInstance={setMapInstance}
           setCenterBoxCoordinate={setCenterBoxCoordinate}
         />
-        <div style={{ display: "flow" }}>
+        <div style={{ flex: '1', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', height: '500px', marginLeft: "20px" }}>
           <SearchBar
             setCenterCoordinate={setCenterCoordinate}
             map={mapInstance}
           />
-          <button onClick={handleFetch}>Fetch Data</button>
+          <div style={{ alignSelf: 'flex-start' }}>
+            <button onClick={handleFetch}>Fetch Data</button>
+          </div>
         </div>
       </div>
     </div>

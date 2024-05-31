@@ -7,4 +7,14 @@ body, html {
   .App {
     height: 100vh;
   }
+
+h1 {
+  font-family: 'Bubblegum Sans', 'Comic Sans MS', 'Marker Felt', 'Arial', sans-serif; /* Verspieltere Schriftarten */
+  font-size: 36px;
+  color: #333;
+  margin-left: 40px;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
   

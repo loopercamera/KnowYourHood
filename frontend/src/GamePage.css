@@ -9,7 +9,7 @@
   color: #333; /* Textfarbe */
   font-family: 'Comic Sans MS', 'Bubblegum Sans', 'Marker Felt', 'Arial', sans-serif; /* Verspieltere Schriftarten */
   height: 100vh;
-  padding: 20px;
+  padding: 40px;
 }
 
 .GameMap {
@@ -23,8 +23,7 @@ button {
   background-color: #669900; /* Button Hintergrundfarbe */
   color: #fff; /* Button Textfarbe */
   border: none;
-  padding: 10px 20px;
-  margin: 5px;
+  padding: 5px 10px;
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
@@ -59,12 +58,15 @@ td {
   overflow: hidden; /* Text abschneiden, wenn er keinen Platz hat */
   text-overflow: ellipsis; /* Text mit ... anzeigen, wenn er abgeschnitten wird */
   white-space: nowrap; /* Verhindern von Zeilenumbrüchen */
-  font-size: 12px;
+  font-size: 16px;
 }
 
 .street-list {
   max-width: calc(50% - 20px);
   padding-left: 20px; /* Maximale Breite auf 50% der Containerbreite minus Margin setzen */
+  padding-top: 37px;
+  display: inline-block; /* In einer Linie anzeigen */
+
 }
 
 ul {
@@ -77,4 +79,27 @@ ul {
   background-color: #558800;
   color: white;
   /* Hier kannst du weitere Stilattribute für die eingefärbten Zellen definieren */
+}
+
+.false-street {
+  background-color: #CC3333;
+  color: white;
+  /* Hier kannst du weitere Stilattribute für die eingefärbten Zellen definieren */
+}
+
+.street-list-container {
+  overflow-x: auto; /* Horizontales Scrollen aktivieren */
+  white-space: nowrap; /* Verhindern von Zeilenumbrüchen */
+}
+
+
+.street-list table td {
+  padding: 3px 6px;
+  border-bottom: 1px solid #446600;
+  border-top: 1px solid #446600;
+  width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 16px;
 }

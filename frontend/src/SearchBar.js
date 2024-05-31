@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import SearchNominatim from 'ol-ext/control/SearchNominatim';
 import './SearchBar.css';
 
-const SearchBar = ({ map, searchField, setCenterCoordinate }) => {
+const SearchBar = ({ map, setCenterCoordinate }) => {
   const searchRef = useRef(null);
   const searchControlRef = useRef(null);
 
@@ -11,7 +11,6 @@ const SearchBar = ({ map, searchField, setCenterCoordinate }) => {
       const searchControl = new SearchNominatim({
         target: searchRef.current,
         onselect: ({ coordinate }) => {
-          console.log(coordinate);
           setCenterCoordinate(coordinate);
         },
       });
@@ -28,7 +27,6 @@ const SearchBar = ({ map, searchField, setCenterCoordinate }) => {
 
   return (
     <div>
-      {searchField}
       <div className="search-results" ref={searchRef} />
     </div>
   );
