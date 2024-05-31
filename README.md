@@ -48,6 +48,6 @@ cd backend/Server/
 
 Start API
 
-```bash
+```b
 uvicorn main:app --reload
 ```

@@ -1,16 +1,14 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pathlib import Path
-from Data_request import Clean_Up_Data, Dataframe_to_json, Overpass_Query
+from Data_request import Clean_Up_Data, Dataframe_to_json, Overpass_Query, Transform_3857_to_4326
 
 app = FastAPI()
 
-# Set up CORS
 origins = [
     "http://localhost",
-    "http://localhost:3000",  # Replace with the origin of your React app
+    "http://localhost:3000",
     "http://127.0.0.1",
-    "http://127.0.0.1:3000",   # Replace with the origin of your React app
+    "http://127.0.0.1:3000",
 ]
 
 app.add_middleware(
@@ -20,11 +18,19 @@ app.add_middleware(
     allow_methods=["GET", "POST", "PUT", "DELETE"],
     allow_headers=["*"],
 )
+
 @app.get("/OSM-streets/")
 async def root(x1: float, y1: float, x2: float, y2: float):
-    bbox_3857 = (y1, x1, y2, x2)  # Adjust the order if necessary
-    Overpass_Query(*bbox_3857)
-    df = Clean_Up_Data()
-    Dataframe_to_json(df)
+    try:
+        bbox_3857 = (x1, y1, x2, y2)
+        min_lon, min_lat, max_lon, max_lat = Transform_3857_to_4326(bbox_3857)
+        Overpass_Query(min_lon, min_lat, max_lon, max_lat)
+        df = Clean_Up_Data()
+        Dataframe_to_json(df)
+        return {"status": "Data successfully saved in street_data.json"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
-    return {"fertig": "Daten wurden erfolgreich in street_data.json gespeichert"}
+@app.get("/OSM-test/")
+async def test(x1: float):
+    return {"status": "Test endpoint"}
