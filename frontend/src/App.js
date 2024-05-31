@@ -18,7 +18,10 @@ function App() {
 
   return (
     <Router>
-      <h1>KnowYourHood</h1>
+      <div style = {{display: 'flex'}}>
+        <h1>KnowYourHood</h1>
+        <div>GitHub</div>
+      </div>
       <Routes>
         <Route
           path="/"

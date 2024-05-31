@@ -1,11 +1,11 @@
 // GamePage.js
 import './GamePage.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import GameMap from './GameMap.js';
 import { useNavigate } from 'react-router-dom';
 
-function StreetList({ streets, doneStreetList }) {
-  const itemsPerColumn = 20;
+function StreetList({ streets, doneStreetList, falseTry }) {
+  const itemsPerColumn = 19;
 
   const splitIntoColumns = (arr, size) => {
     return arr.reduce((columns, item, index) => {
@@ -22,17 +22,21 @@ function StreetList({ streets, doneStreetList }) {
     return doneStreetList.includes(street);
   };
 
+  const isStreetFalse = (street) => {
+    return falseTry.includes(street)
+  }
+
   const columns = splitIntoColumns(streets, itemsPerColumn);
 
   return (
-    <div className="street-list">
+    <div className="street-list-container">
       {columns.map((column, index) => (
-        <div key={index} style={{ float: 'left', marginRight: '20px' }}>
+        <div key={index} className="street-list">
           <table>
             <tbody>
               {column.map((street, i) => (
                 <tr key={i}>
-                  <td className={isStreetDone(street) ? 'done-street' : ''}>{street}</td>
+                  <td className={isStreetDone(street) ? 'done-street' : isStreetFalse(street) ? 'false-street' : ''}>{street}</td>
                 </tr>
               ))}
             </tbody>
@@ -57,6 +61,10 @@ function GamePage({ centerCoordinate, setMapInstance, centerBoxCoordinate, setCe
     const sortedStreets = [...startStreetList].sort();
     return sortedStreets;
   };
+
+  useEffect(() => {
+    handleGameStart();
+  }, []);
 
   const handleGameStart = () => {
     if (startStreetList.length === 0) {
@@ -94,9 +102,9 @@ function GamePage({ centerCoordinate, setMapInstance, centerBoxCoordinate, setCe
   return (
     <div className="GamePage">
       <div style = {{ display: 'flow' }}>
-        <div style = {{ display: 'flex', justifyContent: 'space-between', width: '100%'}}>
-          <div>Where is "{askedStreet}" located?</div>
-          <div>Negative Score: {negativeScore}</div>
+        <div style = {{ display: 'flex', justifyContent: 'space-between', width: '100%', paddingBottom: '9px'}}>
+          <div>Where is <span style={{ fontWeight: 'bold', fontSize: '20px' }}>"{askedStreet}"</span> located?</div>
+          <div>Negative Score: <span style={{ fontWeight: 'bold', fontSize: '20px' }}>{negativeScore}</span></div>
         </div>
         <GameMap className="GameMap"
           style = {{ width: '500px', height: '500px' }}
@@ -116,22 +124,21 @@ function GamePage({ centerCoordinate, setMapInstance, centerBoxCoordinate, setCe
           setNegativeScore={setNegativeScore}
           centerBoxCoordinate={centerBoxCoordinate}
           borderBox={borderBox}/>
-        <div style = {{ display: 'flex', justifyContent: 'space-between', width: '100%'}}>
-          <button onClick = {() => navigate('/')}>
-            New map section
-          </button>
-          <button onClick = {handleGameStart}>
-            Start Game
-          </button>
+        <div style = {{ display: 'flex', justifyContent: 'space-between', width: '500px', paddingTop: '9px'}}>
+          <div>
+            <button onClick = {() => navigate('/')}>
+              Change map section
+            </button>
+            <button onClick = {handleRestart}>
+              Restart
+            </button>
+          </div>
           <button onClick = {handleSkipStreet}>
             Skip
           </button>
-          <button onClick = {handleRestart}>
-            Restart
-          </button>
         </div>
       </div>
-      <StreetList doneStreetList={doneStreetList} streets={generateStreetList()} />
+      <StreetList doneStreetList={doneStreetList} falseTry={falseTry} streets={generateStreetList()} />
     </div>
   );
 }

@@ -1,5 +1,3 @@
-/* MainPage.css */
-
 @import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap');
 
 .MainPage {
@@ -10,7 +8,7 @@
   color: #333; /* Textfarbe */
   font-family: 'Comic Sans MS', 'Bubblegum Sans', 'Marker Felt', 'Arial', sans-serif; /* Verspieltere Schriftarten */
   height: 100vh;
-  padding: 20px;
+  padding: 40px;
 }
 
 .SelectDataFrameMap {
