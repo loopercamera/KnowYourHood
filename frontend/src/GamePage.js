@@ -43,7 +43,7 @@ function StreetList({ streets, doneStreetList }) {
   );
 }
 
-function GamePage({ centerCoordinate, setMapInstance, centerBoxCoordinate, setCenterBoxCoordinate }) {
+function GamePage({ centerCoordinate, setMapInstance, centerBoxCoordinate, setCenterBoxCoordinate, borderBox }) {
   const navigate = useNavigate();
   const [fetchData, setFetchData] = useState(false);
   const [startStreetList, setStartStreetList] = useState([]);
@@ -114,7 +114,8 @@ function GamePage({ centerCoordinate, setMapInstance, centerBoxCoordinate, setCe
           setFalseTry={setFalseTry}
           negativeScore={negativeScore}
           setNegativeScore={setNegativeScore}
-          centerBoxCoordinate={centerBoxCoordinate}/>
+          centerBoxCoordinate={centerBoxCoordinate}
+          borderBox={borderBox}/>
         <div style = {{ display: 'flex', justifyContent: 'space-between', width: '100%'}}>
           <button onClick = {() => navigate('/')}>
             New map section

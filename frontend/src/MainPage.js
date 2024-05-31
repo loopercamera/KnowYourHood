@@ -11,6 +11,8 @@ function MainPage({
   setMapInstance,
   centerBoxCoordinate,
   setCenterBoxCoordinate,
+  setBorderBox,
+  borderBox
 }) {
   const navigate = useNavigate();
 
@@ -22,6 +24,8 @@ function MainPage({
     const y1 = coord[1] - squareDist;
     const x2 = coord[0] + squareDist;
     const y2 = coord[1] + squareDist;
+
+    setBorderBox([x1, y1, x2, y2]);
 
     console.log("x1: ", x1, "y1: ", y1, "x2: ", x2, "y2: ", y2);
     const url = `http://127.0.0.1:8000/OSM-streets/?x1=${x1}&y1=${y1}&x2=${x2}&y2=${y2}`;
